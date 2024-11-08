@@ -2,10 +2,7 @@
 export const nextConfig = {
 	pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 	images: {
-		remotePatterns: [
-			{ protocol: "https", hostname: "pbs.twimg.com" },
-			{ protocol: "https", hostname: "abs.twimg.com" },
-		],
+		domains: ["pbs.twimg.com"], // 外部ドメインを指定
 	},
 	experimental: {
 		mdxRs: true,

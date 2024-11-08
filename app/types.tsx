@@ -1,11 +1,23 @@
+import type { Tweet } from "react-tweet/api";
 export interface Post {
 	id: string;
-	url: string;
 	title: string;
-	comment: string;
-	likes: number;
 	imageUrl?: string;
+	iconUrl?: string;
+	comment: string;
+	description: string;
+	url: string;
+	tweetData?: {
+		user: {
+			profile_image_url_https: string;
+		};
+		text: string;
+		video?: {
+			variants: { src: string }[];
+			captionsUrl: string;
+		};
+		photos?: { url: string }[];
+	};
 	youtubeEmbedUrl?: string;
 	xId?: string;
-	description?: string;
 }

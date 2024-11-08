@@ -1,103 +1,115 @@
 import type { Post } from "app/types";
-import { Suspense } from "react";
-import { TweetSkeleton } from "react-tweet";
-import TweetPage from "../tweet-page";
+import React from "react";
 
-export const PostList = () => {
-	const posts: Post[] = [
-		{
-			id: "1",
-			url: "https://x.com/baseballczech_/status/1854110486637502663",
-			title: "Baseball Czech",
-			description: "Baseball Czech",
-			imageUrl:
-				"https://pbs.twimg.com/profile_images/1372659287973312000/5M0Z1yK9_400x400.jpg",
-			comment: "Baseball Czech",
-			likes: 0,
-		},
-		{
-			id: "2",
-			url: "https://www.youtube.com/watch?v=dC6w8X8NsQ4",
-			title: "YouTube",
-			description: "YouTube",
-			imageUrl: "https://i.ytimg.com/vi/dC6w8X8NsQ4/hqdefault.jpg",
-			comment: "YouTube",
-			likes: 0,
-		},
-		{
-			id: "3",
-			url: "https://note.com/urimu_czech_bb/n/n60d761815525",
-			title: "note",
-			description: "note",
-			imageUrl: "https://note.com/urimu_czech_bb/n/n60d761815525",
-			comment: "note",
-			likes: 0,
-		},
-	];
+const ProfileImage = ({ url, alt }: { url: string; alt: string }) => (
+	<div className="w-12 h-12 mr-4 flex-shrink-0">
+		{url ? (
+			<img
+				src={url}
+				alt={alt}
+				className="w-full h-full object-cover rounded-lg"
+			/>
+		) : (
+			<div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
+				<span className="text-gray-400">No Image</span>
+			</div>
+		)}
+	</div>
+);
 
+const ContentMedia = ({ post }: { post: Post }) => {
+	if (post.tweetData?.video) {
+		return (
+			<video
+				src={post.tweetData?.video?.variants?.[4]?.src || ""}
+				controls
+				className="h-72 w-full rounded-lg object-contain"
+			>
+				<track
+					kind="captions"
+					srcLang="en"
+					src={post.tweetData?.video?.captionsUrl || ""}
+					label="English captions"
+				/>
+			</video>
+		);
+	}
+
+	if (post.tweetData?.photos?.[0]?.url) {
+		return (
+			<img
+				src={post.tweetData.photos[0].url}
+				alt={post.title}
+				className="h-72 w-full rounded-lg object-contain"
+			/>
+		);
+	}
+
+	if (post.youtubeEmbedUrl) {
+		return (
+			<iframe
+				width="560"
+				height="315"
+				src={post.youtubeEmbedUrl}
+				title={post.title}
+				frameBorder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				allowFullScreen
+				className="h-72 w-full rounded-lg object-contain"
+			/>
+		);
+	}
+
+	if (post.imageUrl && post.imageUrl !== post.iconUrl) {
+		return (
+			<img
+				src={post.imageUrl}
+				alt={post.title}
+				className="h-72 w-full rounded-lg object-contain"
+			/>
+		);
+	}
+
+	return null;
+};
+
+export const PostList = ({ posts }: { posts: Post[] }) => {
 	return (
-		<ul>
-			{posts.map((post) => {
-				const isYouTube = post.url.includes("youtube.com");
-				const isTwitter = post.url.includes("x.com");
+		<div>
+			{posts.map((post) => (
+				<div
+					key={post.id}
+					className="flex items-start p-4 mb-4 bg-white rounded-lg shadow-md"
+				>
+					<ProfileImage
+						url={
+							post.tweetData?.user.profile_image_url_https || post.iconUrl || ""
+						}
+						alt={post.title}
+					/>
 
-				if (isYouTube) {
-					post.youtubeEmbedUrl = post.url.replace("watch?v=", "embed/");
-				}
+					<div className="flex-grow">
+						<h2 className="text-lg font-semibold text-gray-800 mb-2">
+							{post.comment}
+						</h2>
+						<p className="text-gray-600 mb-2">
+							{post.tweetData?.text.slice(0, 80) || post.title} ... -{" "}
+							{new URL(post.url).hostname} ↗
+						</p>
 
-				if (isTwitter) {
-					post.xId = post.url.split("/").pop();
-				}
+						<ContentMedia post={post} />
 
-				return (
-					<li
-						key={post.id}
-						style={{
-							border: "1px solid #ccc",
-							padding: "10px",
-							margin: "10px 0",
-						}}
-					>
-						<a href={post.url} target="_blank" rel="noopener noreferrer">
-							<h2>{post.title}</h2>
-							<p>{post.description}</p>
-							{post.imageUrl && (
-								<img
-									src={post.imageUrl}
-									alt={post.title}
-									style={{ width: "100px", height: "auto" }}
-								/>
-							)}
+						<a
+							href={post.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-blue-600 hover:underline"
+						>
+							View Post
 						</a>
-
-						{post.youtubeEmbedUrl && (
-							<div>
-								<h3>YouTube</h3>
-								<iframe
-									width="560"
-									height="315"
-									src={post.youtubeEmbedUrl}
-									frameBorder="0"
-									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-									allowFullScreen
-									title="YouTube Video"
-								/>
-							</div>
-						)}
-
-						{post.xId && (
-							<div>
-								<h3>X (Twitter)</h3>
-								<Suspense fallback={<TweetSkeleton />}>
-									<TweetPage id={post.xId} />
-								</Suspense>
-							</div>
-						)}
-
-						<p>{post.comment}</p>
-					</li>
-				);
-			})}
-		</ul>
+					</div>
+				</div>
+			))}
+		</div>
 	);
 };
