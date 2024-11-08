@@ -4,9 +4,7 @@ import { TweetSkeleton } from "react-tweet";
 import TweetPage from "../tweet-page";
 
 export const PostList = () => {
-	const posts: Post[] = JSON.parse(
-		window?.localStorage?.getItem("posts") || "[]",
-	);
+	const posts: Post[] = [];
 
 	return (
 		<ul>

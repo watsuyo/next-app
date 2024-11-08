@@ -8,9 +8,7 @@ export const PostForm = () => {
 	const [url, setUrl] = useState("");
 	const [title, setTitle] = useState("");
 	const [comment, setComment] = useState("");
-	const [posts, setPosts] = useState<Post[]>(
-		JSON.parse(window?.localStorage?.getItem("posts") || "[]"),
-	);
+	const [posts, setPosts] = useState<Post[]>([]);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -24,7 +22,6 @@ export const PostForm = () => {
 		};
 
 		setPosts([...posts, newPost]);
-		window?.localStorage?.setItem("posts", JSON.stringify([...posts, newPost]));
 
 		setUrl("");
 		setTitle("");
