@@ -1,17 +1,9 @@
 import { unstable_cache } from "next/cache";
 import { PostForm } from "./_components/PostForm";
-import { getPosts } from "./getPosts";
-
-import Image from "next/image";
-import type { TwitterComponents } from "react-tweet";
 import { PostList } from "./_components/PostList";
 import { extractMetatag } from "./extractMetatag";
+import { getPosts } from "./getPosts";
 import type { Post } from "./types";
-
-export const components: TwitterComponents = {
-	AvatarImg: (props) => <Image {...props} />,
-	MediaImg: (props) => <Image {...props} fill unoptimized />,
-};
 
 export const revalidate = 86400;
 
