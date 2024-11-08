@@ -4,7 +4,36 @@ import { TweetSkeleton } from "react-tweet";
 import TweetPage from "../tweet-page";
 
 export const PostList = () => {
-	const posts: Post[] = [];
+	const posts: Post[] = [
+		{
+			id: "1",
+			url: "https://x.com/baseballczech_/status/1854110486637502663",
+			title: "Baseball Czech",
+			description: "Baseball Czech",
+			imageUrl:
+				"https://pbs.twimg.com/profile_images/1372659287973312000/5M0Z1yK9_400x400.jpg",
+			comment: "Baseball Czech",
+			likes: 0,
+		},
+		{
+			id: "2",
+			url: "https://www.youtube.com/watch?v=dC6w8X8NsQ4",
+			title: "YouTube",
+			description: "YouTube",
+			imageUrl: "https://i.ytimg.com/vi/dC6w8X8NsQ4/hqdefault.jpg",
+			comment: "YouTube",
+			likes: 0,
+		},
+		{
+			id: "3",
+			url: "https://note.com/urimu_czech_bb/n/n60d761815525",
+			title: "note",
+			description: "note",
+			imageUrl: "https://note.com/urimu_czech_bb/n/n60d761815525",
+			comment: "note",
+			likes: 0,
+		},
+	];
 
 	return (
 		<ul>
