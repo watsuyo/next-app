@@ -5,6 +5,6 @@ export const nextConfig = {
 		domains: ["pbs.twimg.com"], // 外部ドメインを指定
 	},
 	experimental: {
-		mdxRs: true,
+		appDir: true,
 	},
 };
